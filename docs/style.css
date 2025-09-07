@@ -487,3 +487,54 @@ body {
 .api-method.post { background-color: #4CAF50; color: #fff; }
 .api-method.put { background-color: #FFC107; color: #1a1a1a; }
 .api-method.delete { background-color: #FF4757; color: #fff; }
+
+/* ADICIONAR AO FINAL DO SEU style.css */
+
+/* --- 1. Estilo para o Parágrafo Introdutório ("Preamble") --- */
+.content-area > p:first-of-type {
+    font-size: 1.1rem;      /* Torna o texto ligeiramente maior */
+    color: var(--text-color); /* Usa a cor de texto principal, não a silenciada */
+    margin-bottom: 32px;    /* Aumenta o espaço depois dele */
+}
+
+
+/* --- 2. Estilos para Links de Âncora nos Títulos (Permalinks) --- */
+
+/* Torna o título um container para o link do ícone */
+.content-area h2,
+.content-area h3 {
+    position: relative;
+}
+
+/* Estilo do link/ícone de âncora */
+.heading-anchor-link {
+    position: absolute;
+    /* Posiciona o ícone à esquerda do texto do título */
+    left: -1.5em; 
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5em;
+    height: 1.5em;
+    font-size: 0.8em; /* Tamanho do ícone relativo ao título */
+    color: var(--text-muted);
+    text-decoration: none;
+    opacity: 0; /* Invisível por padrão */
+    transition: opacity 0.2s ease, color 0.2s ease;
+}
+
+/* Mostra o ícone quando o mouse está sobre o título */
+.content-area h2:hover .heading-anchor-link,
+.content-area h3:hover .heading-anchor-link {
+    opacity: 1;
+}
+
+.heading-anchor-link:hover {
+    color: var(--accent-color);
+}
+
+.heading-anchor-link i {
+    font-size: 1em; /* Garante que o ícone preencha o link */
+}
