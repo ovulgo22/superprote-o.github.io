@@ -1,12 +1,17 @@
 ## Autenticação
 
-Para usar a API, você precisa de uma chave de autenticação. Obtenha sua chave no painel de controle e inclua-a no cabeçalho `Authorization` de suas requisições como um Bearer token.
+Toda requisição à API da Super Pró-Técnico deve ser autenticada usando sua chave de API secreta. Requisições sem autenticação ou com uma chave inválida resultarão em um erro `401 Unauthorized`.
 
-Todas as requisições à API devem ser feitas para o endpoint base: `https://api.superprotecnico.com/v1`.
+### Como Obter sua Chave de API
 
-### Exemplo de Requisição
+1.  **Crie uma conta:** Se ainda não tiver uma, registre-se em nossa plataforma.
+2.  **Acesse o Painel do Desenvolvedor:** Faça login e navegue até a seção "API Keys" no menu da sua conta.
+3.  **Gere uma Nova Chave:** Clique em "Create new secret key". Dê um nome descritivo à sua chave (ex: "Meu Projeto de Documentação").
+4.  **Copie e Guarde sua Chave:** Sua chave será exibida **apenas uma vez**. Copie-a e armazene-a em um local seguro. Por motivos de segurança, não poderemos exibi-la novamente.
 
-Abaixo está um exemplo de como fazer uma requisição autenticada usando `cURL` para listar os modelos disponíveis.
+### Usando a Chave de API
+
+Inclua sua chave no cabeçalho `Authorization` de cada requisição como um Bearer Token.
 
 ```bash
 curl [https://api.superprotecnico.com/v1/models](https://api.superprotecnico.com/v1/models) \
