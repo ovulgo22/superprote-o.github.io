@@ -1,0 +1,22 @@
+/* Transitions for smooth animations */
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.sidebar ul li a {
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+main {
+  opacity: 0;
+  animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
