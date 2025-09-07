@@ -66,6 +66,12 @@ body {
     text-decoration: none;
 }
 
+.main-header .top-nav {
+    flex-grow: 1; /* Faz a navegação ocupar o espaço */
+    text-align: right; /* Alinha os links à direita */
+    padding-right: 24px;
+}
+
 .main-header .top-nav a {
     color: var(--text-muted);
     text-decoration: none;
@@ -78,16 +84,6 @@ body {
     color: var(--text-color);
 }
 
-.login-btn {
-    background-color: var(--accent-color);
-    color: #fff;
-    padding: 8px 16px;
-    border-radius: 6px;
-    text-decoration: none;
-    font-size: 0.9rem;
-    font-weight: 500;
-}
-
 /* Barra Lateral */
 .sidebar {
     width: 280px;
@@ -97,17 +93,6 @@ body {
     padding: 24px;
     overflow-y: auto;
     height: 100%;
-}
-
-.sidebar-search input {
-    width: 100%;
-    padding: 10px;
-    border-radius: 6px;
-    background-color: var(--code-bg);
-    border: 1px solid var(--border-color);
-    color: var(--text-color);
-    font-size: 0.9rem;
-    margin-bottom: 24px;
 }
 
 .sidebar-nav ul {
@@ -178,7 +163,6 @@ body {
     text-decoration: underline;
 }
 
-/* Bloco de Código - Estilo base, highlight.js cuida do resto */
 .content-area pre {
     position: relative;
     background-color: var(--code-bg);
@@ -189,32 +173,9 @@ body {
 .content-area pre code.hljs {
     font-family: var(--font-mono);
     font-size: 0.9rem;
-    padding: 0; /* highlight.js às vezes adiciona padding, resetamos */
+    padding: 0;
     background: none;
 }
-
-.copy-btn {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    background: #3c3c3c;
-    border: none;
-    color: var(--text-muted);
-    padding: 8px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.2s, color 0.2s;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.copy-btn:hover {
-    background-color: #4f4f4f;
-    color: var(--text-color);
-}
-
 
 /* Responsividade */
 .mobile-menu-toggle {
@@ -256,60 +217,6 @@ body {
     }
 }
 
-/* --- Estilos para o Seletor de Tema --- */
-.theme-toggle {
-    background: none;
-    border: 1px solid var(--border-color);
-    color: var(--text-muted);
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 16px;
-    transition: background-color 0.2s, color 0.2s;
-}
-
-.theme-toggle:hover {
-    background-color: var(--border-color);
-    color: var(--text-color);
-}
-
-.theme-toggle .sun-icon, .theme-toggle .moon-icon {
-    font-size: 20px;
-}
-.theme-toggle .moon-icon {
-    display: none;
-}
-
-/* --- Definição do Tema Claro (Light Mode) --- */
-body.light-mode {
-    --bg-color: #ffffff;
-    --sidebar-bg: #f7f7f7;
-    --content-bg: #ffffff;
-    --text-color: #1a1a1a;
-    --text-muted: #5c5c5c;
-    --accent-color: #0077cc;
-    --border-color: #e0e0e0;
-    --code-bg: #f0f0f0;
-}
-
-body.light-mode .theme-toggle .sun-icon {
-    display: none;
-}
-body.light-mode .theme-toggle .moon-icon {
-    display: block;
-}
-
-/* --- Transições Suaves --- */
-body, .sidebar, .main-header, .sidebar-search input {
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-/* Adicionar ao final do style.css */
-
 /* --- Estilos da Busca --- */
 .sidebar-search-wrapper {
     position: relative;
@@ -331,7 +238,7 @@ body, .sidebar, .main-header, .sidebar-search input {
 
 .sidebar-search input {
     width: 100%;
-    padding: 10px 10px 10px 40px; /* Espaço para o ícone */
+    padding: 10px 10px 10px 40px;
     border-radius: 6px;
     background-color: var(--code-bg);
     border: 1px solid var(--border-color);
@@ -340,7 +247,7 @@ body, .sidebar, .main-header, .sidebar-search input {
 }
 
 .search-results {
-    display: none; /* Escondido por padrão */
+    display: none;
     position: absolute;
     top: 110%;
     left: 0;
