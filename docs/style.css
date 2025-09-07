@@ -13,24 +13,11 @@
 }
 
 /* Reset Básico */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-primary); background-color: var(--bg-color); color: var(--text-color); -webkit-font-smoothing: antialiased; }
 
-html {
-    scroll-behavior: smooth;
-}
-
-body {
-    font-family: var(--font-primary);
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    -webkit-font-smoothing: antialiased;
-}
-
-/* Layout Principal e Cabeçalho */
+/* Layout e Cabeçalho */
 .docs-container { display: flex; flex-direction: column; height: 100vh; }
 .main-layout { display: flex; flex-grow: 1; overflow: hidden; padding-top: 60px; }
 .main-header { width: 100%; height: 60px; background-color: var(--bg-color); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; position: fixed; top: 0; left: 0; z-index: 1000; }
@@ -39,15 +26,13 @@ body {
 .main-header .top-nav a { color: var(--text-muted); text-decoration: none; margin: 0 16px; font-size: 0.9rem; transition: color 0.2s ease; }
 .main-header .top-nav a:hover { color: var(--text-color); }
 
-/* Coluna 1: Barra Lateral Esquerda */
+/* Coluna 1: Barra Lateral Esquerda e Busca */
 .sidebar { width: 280px; flex-shrink: 0; background-color: var(--sidebar-bg); border-right: 1px solid var(--border-color); padding: 24px; overflow-y: auto; height: 100%; }
 .sidebar-nav ul { list-style: none; }
 .sidebar-nav li a { display: block; color: var(--text-muted); text-decoration: none; padding: 8px 0; font-size: 0.9rem; border-radius: 4px; transition: background-color 0.2s, color 0.2s; }
 .sidebar-nav li a:hover { color: var(--text-color); }
 .sidebar-nav li a.active { color: var(--accent-color); font-weight: 500; }
 .sidebar-nav .category { color: var(--text-muted); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; margin-top: 24px; margin-bottom: 8px; padding: 0; }
-
-/* Estilos da Busca */
 .sidebar-search-wrapper { position: relative; margin-bottom: 24px; }
 .sidebar-search { position: relative; }
 .sidebar-search .ph-magnifying-glass { position: absolute; top: 50%; transform: translateY(-50%); left: 12px; color: var(--text-muted); font-size: 18px; }
@@ -69,16 +54,13 @@ body {
 .content-area p { line-height: 1.7; margin-bottom: 16px; color: var(--text-muted); }
 .content-area a { color: var(--accent-color); text-decoration: none; }
 .content-area a:hover { text-decoration: underline; }
-
-/* Estilo para Parágrafo Introdutório (Preamble) */
 .content-area > p:first-of-type { font-size: 1.1rem; color: var(--text-color); margin-bottom: 32px; }
-/* Estilos para Links de Âncora nos Títulos (Permalinks) */
 .heading-anchor-link { position: absolute; left: -1.5em; top: 50%; transform: translateY(-50%); display: flex; align-items: center; justify-content: center; width: 1.5em; height: 1.5em; font-size: 0.8em; color: var(--text-muted); text-decoration: none; opacity: 0; transition: opacity 0.2s ease, color 0.2s ease; }
 .content-area h2:hover .heading-anchor-link, .content-area h3:hover .heading-anchor-link { opacity: 1; }
 .heading-anchor-link:hover { color: var(--accent-color); }
 .heading-anchor-link i { font-size: 1em; }
 
-/* Coluna 3: Barra Lateral Direita (Índice da Página) */
+/* Coluna 3: Barra Lateral Direita */
 .on-page-nav { width: 260px; flex-shrink: 0; padding: 24px; height: 100%; overflow-y: auto; border-left: 1px solid var(--border-color); }
 .on-page-nav-content { position: sticky; top: 24px; }
 .on-page-nav h6 { font-size: 0.9rem; font-weight: 500; color: var(--text-color); margin-bottom: 16px; }
@@ -92,16 +74,16 @@ body {
 @media (max-width: 1024px) { .on-page-nav { display: none; } }
 @media (max-width: 768px) { .sidebar { position: fixed; left: 0; top: 60px; bottom: 0; transform: translateX(-100%); transition: transform 0.3s ease-in-out; z-index: 999; background-color: var(--bg-color); width: 280px; } .sidebar.visible { transform: translateX(0); } .mobile-menu-toggle { display: block; position: fixed; top: 15px; left: 15px; z-index: 1001; background: transparent; border: none; color: var(--text-color); font-size: 24px; cursor: pointer; } .main-header .logo { margin-left: 40px; } .content-area { padding: 24px; } }
 
-/* --- COMPONENTES DE CONTEÚDO (ATUALIZADO E NOVO) --- */
+/* --- COMPONENTES DE CONTEÚDO --- */
 
-/* Tabelas Melhoradas */
+/* Tabelas */
 .content-area table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 0.9rem; }
 .content-area th, .content-area td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--border-color); }
 .content-area th { font-weight: 600; color: var(--text-color); }
 .content-area tr:last-child td { border-bottom: none; }
 .content-area td code { background-color: var(--code-bg); padding: 2px 6px; border-radius: 4px; font-size: 0.85rem; }
 
-/* Blocos de Código Melhorados */
+/* Blocos de Código */
 .code-block-wrapper { background-color: var(--code-bg); border: 1px solid var(--border-color); border-radius: 8px; margin: 24px 0; overflow: hidden; }
 .code-block-header { display: flex; justify-content: space-between; align-items: center; background-color: #333333; padding: 8px 16px; border-bottom: 1px solid var(--border-color); }
 .code-block-header .lang-name { font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted); text-transform: lowercase; }
@@ -109,62 +91,131 @@ body {
 .code-block-header .copy-btn:hover { color: var(--text-color); }
 .content-area pre { margin: 0; border-radius: 0; border: none; padding: 16px; background-color: transparent; }
 
-/* "Callouts" (Avisos, Dicas, etc.) */
+/* "Callouts" (Avisos/Dicas) */
 .callout { padding: 16px; margin: 24px 0; border-radius: 6px; border-left: 4px solid; display: flex; gap: 12px; }
-.callout p { margin-bottom: 0; line-height: 1.6; }
+.callout p { margin: 0; line-height: 1.6; }
 .callout p:first-child { margin-top: 2px; }
 .callout i { font-size: 20px; margin-top: 2px; }
-/* Variações de Cor e Ícone */
 .callout.note { background-color: rgba(0, 170, 255, 0.1); border-color: #00aaff; color: #87cefa; }
 .callout.note i { color: #00aaff; }
-.callout.tip { background-color: rgba(63, 185, 80, 0.1); border-color: #3FB950; color: #8fbc8f; } /* NOVO */
-.callout.tip i { color: #3FB950; } /* NOVO */
+.callout.tip { background-color: rgba(63, 185, 80, 0.1); border-color: #3FB950; color: #8fbc8f; }
+.callout.tip i { color: #3FB950; }
 .callout.warning { background-color: rgba(255, 215, 0, 0.1); border-color: #FFD700; color: #f0e68c; }
 .callout.warning i { color: #FFD700; }
-.callout.important { background-color: rgba(163, 113, 247, 0.1); border-color: #A371F7; color: #c3b1e1; } /* NOVO */
-.callout.important i { color: #A371F7; } /* NOVO */
+.callout.important { background-color: rgba(163, 113, 247, 0.1); border-color: #A371F7; color: #c3b1e1; }
+.callout.important i { color: #A371F7; }
 .callout.danger { background-color: rgba(255, 71, 87, 0.1); border-color: #FF4757; color: #ffcccb; }
 .callout.danger i { color: #FF4757; }
 
-/* Badges de Métodos de API */
+/* Badges e Tags */
 .api-method { display: inline-block; padding: 2px 8px; font-family: var(--font-mono); font-size: 0.8rem; font-weight: 700; border-radius: 4px; text-transform: uppercase; line-height: 1.4; }
 .api-method.get { background-color: #00aaff; color: #fff; }
 .api-method.post { background-color: #4CAF50; color: #fff; }
 .api-method.put { background-color: #FFC107; color: #1a1a1a; }
 .api-method.delete { background-color: #FF4757; color: #fff; }
+.content-area kbd { background-color: #484F58; border: 1px solid #6e7681; border-bottom-width: 2px; border-radius: 4px; padding: 2px 6px; font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-color); }
+.content-area details { border: 1px solid var(--border-color); border-radius: 6px; margin: 24px 0; overflow: hidden; }
+.content-area summary { cursor: pointer; padding: 12px 16px; font-weight: 500; background-color: #2c2c2c; display: list-item; }
+.content-area summary::marker { color: var(--text-muted); }
+.content-area details[open] > summary { border-bottom: 1px solid var(--border-color); }
+.content-area details > div { padding: 16px; }
 
-/* Teclas de Atalho (<kbd>) - NOVO */
-.content-area kbd {
-    background-color: #484F58;
-    border: 1px solid #6e7681;
-    border-bottom-width: 2px;
-    border-radius: 4px;
-    padding: 2px 6px;
-    font-family: var(--font-mono);
-    font-size: 0.8rem;
-    color: var(--text-color);
-}
+/* --- NOVOS COMPONENTES --- */
 
-/* Seções Expansíveis (<details>) - NOVO */
-.content-area details {
+/* 1. Abas de Código Interativas */
+.code-tabs {
     border: 1px solid var(--border-color);
-    border-radius: 6px;
+    border-radius: 8px;
     margin: 24px 0;
-    overflow: hidden; /* Para manter o border-radius */
+    overflow: hidden;
 }
-.content-area summary {
-    cursor: pointer;
-    padding: 12px 16px;
-    font-weight: 500;
-    background-color: #2c2c2c;
-    display: list-item; /* Para mostrar o marcador padrão */
-}
-.content-area summary::marker {
-    color: var(--text-muted);
-}
-.content-area details[open] > summary {
+.code-tabs-bar {
+    display: flex;
+    background-color: #333333;
+    padding: 0 8px;
     border-bottom: 1px solid var(--border-color);
 }
-.content-area details > div {
-    padding: 16px;
+.code-tabs-bar button {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    padding: 10px 16px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-family: var(--font-primary);
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+}
+.code-tabs-bar button:hover {
+    color: var(--text-color);
+}
+.code-tabs-bar button.active {
+    color: var(--accent-color);
+    font-weight: 500;
+    border-bottom-color: var(--accent-color);
+}
+.code-tabs .code-block-wrapper {
+    margin: 0;
+    border: none;
+    border-radius: 0;
+}
+.code-tabs .code-block-wrapper.hidden {
+    display: none;
+}
+
+/* 2. Listas de Tarefas (Checklists) */
+.content-area ul li.task-list-item {
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.content-area input[type="checkbox"] {
+    margin: 0;
+    appearance: none;
+    -webkit-appearance: none;
+    background-color: transparent;
+    border: 1px solid var(--text-muted);
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+    position: relative;
+}
+.content-area input[type="checkbox"]:checked {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+.content-area input[type="checkbox"]:checked::after {
+    content: '✔';
+    position: absolute;
+    color: var(--bg-color);
+    font-size: 12px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* 3. Imagens com Legendas */
+.content-area figure {
+    margin: 32px 0;
+    text-align: center;
+}
+.content-area figure img {
+    max-width: 100%;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    background-color: #fff; /* Fundo branco para imagens com transparência */
+}
+.content-area figure figcaption {
+    margin-top: 12px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+/* 4. Linhas Horizontais Estilizadas */
+.content-area hr {
+    border: 0;
+    height: 1px;
+    background-color: var(--border-color);
+    margin: 48px 0;
 }
