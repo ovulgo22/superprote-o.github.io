@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentação Personalizada | Estilo OpenAI</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Sohne:wght@400;500;700&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/phosphor-icons"></script>
+</head>
+<body>
+    <div class="docs-container">
+        <button class="mobile-menu-toggle" id="mobile-menu-toggle">
+            <i class="ph-list"></i>
+        </button>
+
+        <header class="main-header">
+            <div class="logo">
+                <a href="#">MeuLogo</a>
+            </div>
+            <nav class="top-nav">
+                <a href="#">API</a>
+                <a href="#">Documentação</a>
+                <a href="#">Exemplos</a>
+            </nav>
+            <div class="header-actions">
+                <a href="#" class="login-btn">Login</a>
+            </div>
+        </header>
+
+        <div class="main-layout">
+            <aside class="sidebar" id="sidebar">
+                <div class="sidebar-search">
+                    <input type="text" placeholder="Buscar na documentação...">
+                </div>
+                <nav class="sidebar-nav">
+                    <ul>
+                        <li><a href="#introducao" class="active">Introdução</a></li>
+                        <li><a href="#autenticacao">Autenticação</a></li>
+                        <li class="category"><span>Modelos</span></li>
+                        <li><a href="#gpt-4">GPT-4</a></li>
+                        <li><a href="#gpt-3-5">GPT-3.5</a></li>
+                        <li class="category"><span>Recursos</span></li>
+                        <li><a href="#completions">Completions</a></li>
+                        <li><a href="#chat">Chat</a></li>
+                        <li><a href="#embeddings">Embeddings</a></li>
+                        <li class="category"><span>Guias Avançados</span></li>
+                        <li><a href="#fine-tuning">Fine-tuning</a></li>
+                        <li><a href="#rate-limits">Rate Limits</a></li>
+                    </ul>
+                </nav>
+            </aside>
+
+            <main class="content-area">
+                <article>
+                    <section id="introducao">
+                        <h1>Introdução</h1>
+                        <p>Bem-vindo à documentação da nossa API. Aqui você encontrará tudo o que precisa para começar a fazer requisições e integrar nossos modelos em suas aplicações.</p>
+                        <p>A estrutura desta documentação foi desenhada para ser clara, concisa e fácil de navegar.</p>
+                    </section>
+
+                    <section id="autenticacao">
+                        <h2>Autenticação</h2>
+                        <p>Para usar a API, você precisa de uma chave de autenticação. Obtenha sua chave no painel de controle e inclua-a no cabeçalho de suas requisições da seguinte forma:</p>
+                        
+                        <div class="code-block">
+                            <pre><code>curl https://api.exemplo.com/v1/models \
+  -H "Authorization: Bearer SUA_CHAVE_DE_API"</code></pre>
+                            <button class="copy-btn"><i class="ph-copy"></i> Copiar</button>
+                        </div>
+                    </section>
+
+                    <section id="gpt-4">
+                        <h2>GPT-4</h2>
+                        <p>O GPT-4 é nosso modelo mais avançado, capaz de resolver problemas complexos com maior precisão do que os modelos anteriores. Ele é otimizado para tarefas de conversação e chat.</p>
+                        
+                        <div class="code-block">
+                            <pre><code>{
+  "model": "gpt-4",
+  "messages": [
+    {
+      "role": "system",
+      "content": "Você é um assistente prestativo."
+    },
+    {
+      "role": "user",
+      "content": "Olá!"
+    }
+  ]
+}</code></pre>
+                             <button class="copy-btn"><i class="ph-copy"></i> Copiar</button>
+                        </div>
+                    </section>
+                </article>
+            </main>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
