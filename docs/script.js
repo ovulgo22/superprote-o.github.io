@@ -1,11 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // --- Elementos Globais ---
+    // --- Elementos Globais e Variáveis ---
     const sidebarNav = document.getElementById('sidebar-nav');
     const contentArea = document.getElementById('content-area');
     const onPageToc = document.getElementById('on-page-toc');
     const searchInput = document.getElementById('search-input');
-    // ... (outros elementos)
-
+    const searchResults = document.getElementById('search-results');
     let searchIndex = [];
     let observer; // Variável para o IntersectionObserver
 
@@ -29,11 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // --- Construção do Menu e Índice de Busca (sem alterações) ---
-    // ... (funções fetchMenuConfig, buildSidebarMenu, buildSearchIndex)
-    const fetchMenuConfig=async()=>{try{const e=await fetch("menu.json");if(!e.ok)throw new Error("menu.json não encontrado.");return await e.json()}catch(e){return console.error("Erro fatal ao carregar o menu:",e),sidebarNav.innerHTML="<ul><li>Erro ao carregar menu.</li></ul>",null}};const buildSidebarMenu=e=>{const t=document.createElement("ul");e.forEach(e=>{const o=document.createElement("li");"category"===e.type?(o.className="category",o.innerHTML=`<span>${e.title}</span>`):"link"===e.type&&(o.innerHTML=`<a href="#${e.page}" data-page="${e.page}" class="nav-link">${e.title}</a>`),t.appendChild(o)}),sidebarNav.innerHTML="",sidebarNav.appendChild(t)};const buildSearchIndex=async e=>{const t=e.filter(e=>"link"===e.type).map(async e=>{try{const t=await fetch(`content/${e.page}.md`),o=await t.text();searchIndex.push({title:e.title,page:e.page,content:o})}catch(t){console.warn(`Não foi possível indexar a página: ${e.page}`)}});await Promise.all(t)};
-
-    // --- Lógica de Carregamento de Conteúdo (ATUALIZADO) ---
+    // --- Lógica de Carregamento de Conteúdo ---
     const loadContent = async (page) => {
         if (!page) page = 'introducao';
         try {
@@ -41,9 +36,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!response.ok) throw new Error('Página não encontrada.');
             const markdown = await response.text();
             contentArea.innerHTML = marked.parse(markdown);
-            contentArea.querySelectorAll('pre code').forEach(block => hljs.highlightElement(block));
             
-            // NOVO: Gera o índice da página após carregar o conteúdo
+            // Pós-processamento do HTML renderizado
+            enhanceCodeBlocks();
+            transformCallouts();
             generateOnPageNav();
 
         } catch (error) {
@@ -52,12 +48,85 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         contentArea.scrollTop = 0;
     };
+    
+    // --- FUNÇÕES DE MELHORIA DE UI ---
 
-    // --- NOVO: Geração do Índice da Página (TOC) ---
+    // 1. Adiciona cabeçalho e botão de cópia aos blocos de código
+    const enhanceCodeBlocks = () => {
+        const codeBlocks = contentArea.querySelectorAll('pre');
+        codeBlocks.forEach(pre => {
+            // Evita adicionar cabeçalho a um bloco que já faz parte do nosso wrapper
+            if (pre.parentNode.classList.contains('code-block-wrapper')) {
+                return;
+            }
+            
+            const code = pre.querySelector('code');
+            if (!code) return;
+
+            const lang = code.className.replace('hljs language-', '').trim() || 'shell';
+
+            const wrapper = document.createElement('div');
+            wrapper.className = 'code-block-wrapper';
+
+            const header = document.createElement('div');
+            header.className = 'code-block-header';
+            
+            const langName = document.createElement('span');
+            langName.className = 'lang-name';
+            langName.textContent = lang;
+
+            const copyBtn = document.createElement('button');
+            copyBtn.className = 'copy-btn';
+            copyBtn.innerHTML = '<i class="ph-copy"></i> Copiar';
+
+            copyBtn.addEventListener('click', () => {
+                navigator.clipboard.writeText(code.innerText).then(() => {
+                    copyBtn.innerHTML = '<i class="ph-check-circle"></i> Copiado!';
+                    setTimeout(() => {
+                        copyBtn.innerHTML = '<i class="ph-copy"></i> Copiar';
+                    }, 2000);
+                });
+            });
+
+            header.appendChild(langName);
+            header.appendChild(copyBtn);
+            
+            pre.parentNode.insertBefore(wrapper, pre);
+            wrapper.appendChild(header);
+            wrapper.appendChild(pre);
+        });
+    };
+
+    // 2. Transforma blockquotes em "Callouts" (avisos/dicas)
+    const transformCallouts = () => {
+        const blockquotes = contentArea.querySelectorAll('blockquote');
+        const calloutTypes = {
+            '[!NOTE]': { class: 'note', icon: 'ph-info' },
+            '[!WARNING]': { class: 'warning', icon: 'ph-warning' },
+            '[!DANGER]': { class: 'danger', icon: 'ph-warning-octagon' }
+        };
+
+        blockquotes.forEach(bq => {
+            const p = bq.querySelector('p');
+            if (!p) return;
+            
+            const text = p.innerHTML.trim();
+            const type = Object.keys(calloutTypes).find(key => text.startsWith(key));
+
+            if (type) {
+                const config = calloutTypes[type];
+                bq.className = `callout ${config.class}`;
+                p.innerHTML = text.substring(type.length).trim();
+                bq.innerHTML = `<i class="ph ${config.icon}"></i><div>${bq.innerHTML}</div>`;
+            }
+        });
+    };
+
+    // --- Geração do Índice da Página (TOC) e Destaque Ativo ---
     const generateOnPageNav = () => {
         onPageToc.innerHTML = '';
         const headings = contentArea.querySelectorAll('h2, h3');
-        if (headings.length < 2) return; // Não mostra o TOC se houver poucos títulos
+        if (headings.length < 2) return;
 
         headings.forEach(heading => {
             const text = heading.textContent;
@@ -74,41 +143,163 @@ document.addEventListener('DOMContentLoaded', () => {
         setupIntersectionObserver();
     };
 
-    // --- NOVO: Destaque Ativo do Índice com Intersection Observer ---
     const setupIntersectionObserver = () => {
-        // Desconecta o observador anterior, se existir
         if (observer) observer.disconnect();
-
         const headings = contentArea.querySelectorAll('h2, h3');
         if (headings.length === 0) return;
         
         const options = { root: contentArea, rootMargin: "0px 0px -80% 0px" };
 
         observer = new IntersectionObserver((entries) => {
+            let visibleSection = null;
             entries.forEach(entry => {
-                const id = entry.target.getAttribute('id');
-                const link = onPageToc.querySelector(`a[href="#${id}"]`);
-                if (link) {
-                    if (entry.isIntersecting && entry.intersectionRatio > 0) {
-                        // Remove 'active' de todos e adiciona ao link atual
-                        onPageToc.querySelectorAll('a').forEach(a => a.classList.remove('active'));
-                        link.classList.add('active');
+                if (entry.isIntersecting) {
+                    if (!visibleSection) {
+                         visibleSection = entry.target.getAttribute('id');
                     }
                 }
             });
+
+            if (visibleSection) {
+                 onPageToc.querySelectorAll('a').forEach(a => a.classList.remove('active'));
+                 const activeLink = onPageToc.querySelector(`a[href="#${visibleSection}"]`);
+                 if(activeLink) {
+                     activeLink.classList.add('active');
+                 }
+            }
         }, options);
 
         headings.forEach(heading => observer.observe(heading));
     };
 
-    // --- Lógica de Navegação e Roteamento (sem alterações) ---
-    const handleNavigation=()=>{const e=window.location.hash.substring(1)||"introducao";loadContent(e),updateActiveLink(e)};const updateActiveLink=e=>{document.querySelectorAll(".sidebar-nav .nav-link").forEach(t=>{t.classList.toggle("active",t.dataset.page===e)})};
+    // --- Construção do Menu e Índice de Busca ---
+    const fetchMenuConfig = async () => {
+        try {
+            const response = await fetch('menu.json');
+            if (!response.ok) throw new Error('menu.json não encontrado.');
+            return await response.json();
+        } catch (error) {
+            console.error("Erro fatal ao carregar o menu:", error);
+            sidebarNav.innerHTML = "<ul><li>Erro ao carregar menu.</li></ul>";
+            return null;
+        }
+    };
 
-    // --- Lógica da Busca (sem alterações) ---
-    const handleSearch=e=>{const t=e.target.value.toLowerCase().trim();if(t.length<2)return void searchResults.classList.remove("visible");const o=searchIndex.map(e=>{const o=e.content.toLowerCase().indexOf(t),n=e.title.toLowerCase().includes(t);let s="";return o>-1?s=`...${e.content.substring(Math.max(0,o-30),o+t.length+70)}...`:n&&(s=e.content.substring(0,100)+" ..."),{score:n?10:o>-1?5:0,item:e,context:s}}).filter(e=>e.score>0).sort((e,t)=>t.score-e.score);renderSearchResults(o)};const renderSearchResults=e=>{if(0===e.length)return void searchResults.classList.remove("visible");searchResults.innerHTML=e.map(e=>`\n            <a href="#${e.item.page}" class="search-result-item">\n                <span class="result-title">${e.item.title}</span>\n                <span class="result-context">${e.context.replace(/</g,"&lt;").replace(/>/g,"&gt;")}</span>\n            </a>\n        `).join(""),searchResults.classList.add("visible")};
+    const buildSidebarMenu = (config) => {
+        const ul = document.createElement('ul');
+        config.forEach(item => {
+            const li = document.createElement('li');
+            if (item.type === 'category') {
+                li.className = 'category';
+                li.innerHTML = `<span>${item.title}</span>`;
+            } else if (item.type === 'link') {
+                li.innerHTML = `<a href="#${item.page}" data-page="${item.page}" class="nav-link">${item.title}</a>`;
+            }
+            ul.appendChild(li);
+        });
+        sidebarNav.innerHTML = '';
+        sidebarNav.appendChild(ul);
+    };
 
-    // --- Configuração dos Event Listeners (sem alterações) ---
-    function setupEventListeners(){window.addEventListener("hashchange",handleNavigation),searchInput.addEventListener("input",handleSearch),searchInput.addEventListener("focus",handleSearch),document.addEventListener("click",e=>{e.target.closest(".sidebar-search-wrapper")||searchResults.classList.remove("visible"),e.target.closest(".search-result-item")&&(searchResults.classList.remove("visible"),searchInput.value="")});const e=document.getElementById("mobile-menu-toggle"),t=document.getElementById("sidebar");e.addEventListener("click",()=>t.classList.toggle("visible")),t.addEventListener("click",e=>{e.target.closest(".nav-link")&&t.classList.contains("visible")&&t.classList.remove("visible")})}
+    const buildSearchIndex = async (config) => {
+        const fetchPromises = config
+            .filter(item => item.type === 'link')
+            .map(async item => {
+                try {
+                    const response = await fetch(`content/${item.page}.md`);
+                    const content = await response.text();
+                    searchIndex.push({ title: item.title, page: item.page, content });
+                } catch (e) {
+                    console.warn(`Não foi possível indexar a página: ${item.page}`);
+                }
+            });
+        await Promise.all(fetchPromises);
+    };
+
+    // --- Lógica de Navegação e Roteamento ---
+    const handleNavigation = () => {
+        const page = window.location.hash.substring(1) || 'introducao';
+        loadContent(page);
+        updateActiveLink(page);
+    };
+
+    const updateActiveLink = (page) => {
+        document.querySelectorAll('.sidebar-nav .nav-link').forEach(link => {
+            link.classList.toggle('active', link.dataset.page === page);
+        });
+    };
+
+    // --- Lógica da Busca ---
+    const handleSearch = (event) => {
+        const query = event.target.value.toLowerCase().trim();
+        if (query.length < 2) {
+            searchResults.classList.remove('visible');
+            return;
+        }
+
+        const results = searchIndex.map(item => {
+            const contentMatchIndex = item.content.toLowerCase().indexOf(query);
+            const titleMatch = item.title.toLowerCase().includes(query);
+            let context = '';
+
+            if (contentMatchIndex > -1) {
+                const start = Math.max(0, contentMatchIndex - 30);
+                const end = contentMatchIndex + query.length + 70;
+                context = `...${item.content.substring(start, end)}...`;
+            } else if (titleMatch) {
+                context = item.content.substring(0, 100) + '...';
+            }
+
+            return { score: titleMatch ? 10 : (contentMatchIndex > -1 ? 5 : 0), item, context };
+        })
+        .filter(result => result.score > 0)
+        .sort((a, b) => b.score - a.score);
+
+        renderSearchResults(results);
+    };
+    
+    const renderSearchResults = (results) => {
+        if (results.length === 0) {
+            searchResults.classList.remove('visible');
+            return;
+        }
+        searchResults.innerHTML = results.map(result => `
+            <a href="#${result.item.page}" class="search-result-item">
+                <span class="result-title">${result.item.title}</span>
+                <span class="result-context">${result.context.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</span>
+            </a>
+        `).join('');
+        searchResults.classList.add('visible');
+    };
+
+    // --- Configuração dos Event Listeners ---
+    function setupEventListeners() {
+        window.addEventListener('hashchange', handleNavigation);
+        
+        searchInput.addEventListener('input', handleSearch);
+        searchInput.addEventListener('focus', handleSearch);
+
+        document.addEventListener('click', (event) => {
+            if (!event.target.closest('.sidebar-search-wrapper')) {
+                searchResults.classList.remove('visible');
+            }
+            if (event.target.closest('.search-result-item')) {
+                searchResults.classList.remove('visible');
+                searchInput.value = '';
+            }
+        });
+        
+        const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+        const sidebar = document.getElementById('sidebar');
+
+        mobileMenuToggle.addEventListener('click', () => sidebar.classList.toggle('visible'));
+
+        sidebar.addEventListener('click', (event) => {
+            if (event.target.closest('.nav-link') && sidebar.classList.contains('visible')) {
+                sidebar.classList.remove('visible');
+            }
+        });
+    }
 
     // --- Iniciar ---
     initializeApp();
