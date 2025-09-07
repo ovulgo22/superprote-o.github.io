@@ -1,4 +1,4 @@
-/* --- PALETA DE CORES E VARIÁVEIS GLOBAIS --- */
+/* --- PALETA DE CORES E VARIÁVEIS GLOBAIS (TEMA ÚNICO) --- */
 :root {
     --primary-color: #137fec;
     --secondary-color: #e7edf3;
@@ -11,16 +11,6 @@
     --font-primary: 'Inter', sans-serif;
     --font-mono: 'Source Code Pro', monospace;
 }
-.dark {
-    --primary-color: #137fec;
-    --secondary-color: #1f2937;
-    --text-primary: #ffffff;
-    --text-secondary: #94a3b8;
-    --background-primary: #0f172a;
-    --background-secondary: #1e293b;
-    --border-color: #1f2937;
-    --code-bg: #1e293b;
-}
 
 /* --- RESET BÁSICO E ESTILOS GLOBAIS --- */
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -29,7 +19,6 @@ body {
     font-family: var(--font-primary);
     background-color: var(--background-primary);
     color: var(--text-primary);
-    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* --- ESTRUTURA PRINCIPAL --- */
@@ -51,10 +40,6 @@ body {
 .icon-btn:hover { color: var(--text-primary); background-color: var(--secondary-color); }
 .icon-btn i { font-size: 22px; }
 .user-avatar { width: 32px; height: 32px; border-radius: 50%; background-size: cover; background-position: center; border: 2px solid var(--border-color); }
-#theme-toggle .theme-icon-moon { display: none; }
-.dark #theme-toggle .theme-icon-moon { display: block; }
-.dark #theme-toggle .theme-icon-sun { display: none; }
-
 
 /* --- COLUNAS (SIDEBARS E CONTEÚDO) --- */
 .sidebar { width: 280px; flex-shrink: 0; background-color: var(--background-secondary); border-right: 1px solid var(--border-color); padding: 24px; overflow-y: auto; height: 100%; }
@@ -72,14 +57,13 @@ body {
 .sidebar-search .ph-magnifying-glass { position: absolute; top: 50%; transform: translateY(-50%); left: 12px; color: var(--text-secondary); font-size: 18px; }
 .sidebar-search input { width: 100%; padding: 10px 10px 10px 40px; border-radius: 6px; background-color: var(--secondary-color); border: 1px solid transparent; color: var(--text-primary); font-size: 0.9rem; }
 .sidebar-search input:focus { border-color: var(--primary-color); outline: none; box-shadow: 0 0 0 2px rgba(19, 127, 236, 0.5); }
-.search-results { display: none; position: absolute; top: 110%; left: 0; right: 0; background-color: var(--background-secondary); border: 1px solid var(--border-color); border-radius: 6px; max-height: 400px; overflow-y: auto; z-index: 10; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+.search-results { display: none; position: absolute; top: 110%; left: 0; right: 0; background-color: var(--background-secondary); border: 1px solid var(--border-color); border-radius: 6px; max-height: 400px; overflow-y: auto; z-index: 10; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
 .search-results.visible { display: block; }
 .search-results a { display: block; padding: 12px 16px; color: var(--text-secondary); text-decoration: none; border-bottom: 1px solid var(--border-color); transition: background-color 0.2s; }
 .search-results a:last-child { border-bottom: none; }
 .search-results a:hover { background-color: var(--secondary-color); color: var(--text-primary); }
 .search-results .result-title { font-weight: 500; color: var(--text-primary); display: block; }
 .search-results .result-context { font-size: 0.8rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; margin-top: 4px; }
-
 
 /* Conteúdo Principal */
 .content-area h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 16px; }
@@ -143,11 +127,11 @@ body {
 .callout p { margin: 0; line-height: 1.6; }
 .callout p:first-child { margin-top: 2px; }
 .callout i { font-size: 20px; margin-top: 2px; }
-.callout.note { background-color: rgba(19, 127, 236, 0.1); border-color: var(--primary-color); color: var(--text-secondary); }
+.callout.note { background-color: rgba(19, 127, 236, 0.1); border-color: var(--primary-color); color: #0d5291; }
+.dark .callout.note { color: #add8e6; }
 .callout.note i { color: var(--primary-color); }
-/* ... (outros callouts) ... */
 .api-method { display: inline-block; padding: 2px 8px; font-family: var(--font-mono); font-size: 0.8rem; font-weight: 700; border-radius: 4px; text-transform: uppercase; line-height: 1.4; }
-/* ... (outros componentes de conteúdo) ... */
+.api-method.post { background-color: #4CAF50; color: #fff; }
 
 /* --- RESPONSIVIDADE --- */
 .mobile-menu-toggle { display: none; }
