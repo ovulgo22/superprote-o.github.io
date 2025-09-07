@@ -1,0 +1,59 @@
+[
+    {
+        "type": "link",
+        "title": "Introdução",
+        "page": "introducao"
+    },
+    {
+        "type": "link",
+        "title": "Autenticação",
+        "page": "autenticação"
+    },
+    {
+        "type": "category",
+        "title": "Modelos"
+    },
+    {
+        "type": "link",
+        "title": "GPT-4",
+        "page": "gpt-4"
+    },
+    {
+        "type": "link",
+        "title": "GPT-3.5",
+        "page": "gpt-3.5"
+    },
+    {
+        "type": "category",
+        "title": "Recursos"
+    },
+    {
+        "type": "link",
+        "title": "Completions",
+        "page": "completions"
+    },
+    {
+        "type": "link",
+        "title": "Chat",
+        "page": "chat"
+    },
+    {
+        "type": "link",
+        "title": "Embeddings",
+        "page": "embeddings"
+    },
+    {
+        "type": "category",
+        "title": "Guias Avançados"
+    },
+    {
+        "type": "link",
+        "title": "Fine-tuning",
+        "page": "fine-tuning"
+    },
+    {
+        "type": "link",
+        "title": "Rate Limits",
+        "page": "rate-limits"
+    }
+]
