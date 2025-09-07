@@ -1,18 +1,18 @@
 [
   {
     "title": "Início",
-    "path": "docs/home.md"
+    "path": "home.md"
   },
   {
     "title": "Guias",
     "children": [
       {
         "title": "Primeiro Artigo",
-        "path": "docs/guias/primeiro-artigo.md"
+        "path": "guias/primeiro-artigo.md"
       },
       {
         "title": "Segundo Artigo",
-        "path": "docs/guias/segundo-artigo.md"
+        "path": "guias/segundo-artigo.md"
       }
     ]
   }
