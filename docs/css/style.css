@@ -257,3 +257,50 @@ body {
     .search-input { width: 150px; }
     .search-input:focus { width: 200px; }
 }
+/* Adicionar no final de style.css */
+
+/* ESTILOS DA PESQUISA */
+.search-results {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 400px;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: 6px;
+    margin-top: 0.5rem;
+    max-height: 400px;
+    overflow-y: auto;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    z-index: 200;
+}
+.search-results.visible {
+    display: block;
+}
+.search-result-item {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border-primary);
+    text-decoration: none;
+    display: block;
+    color: var(--text-primary);
+}
+.search-result-item:last-child {
+    border-bottom: none;
+}
+.search-result-item:hover {
+    background-color: var(--bg-secondary);
+}
+.search-result-item .title {
+    font-weight: 600;
+    display: block;
+}
+.search-result-item .path {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+.search-results .no-results {
+    padding: 1rem;
+    text-align: center;
+    color: var(--text-secondary);
+}
