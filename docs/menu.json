@@ -5,40 +5,26 @@
         "page": "introducao"
     },
     {
+        "type": "category",
+        "title": "Guias de Documentação"
+    },
+    {
         "type": "link",
-        "title": "Autenticação",
-        "page": "autenticacao"
+        "title": "Páginas de Autenticação",
+        "page": "guia-autenticacao"
+    },
+    {
+        "type": "link",
+        "title": "Referência de API",
+        "page": "guia-referencia-api"
     },
     {
         "type": "category",
-        "title": "Modelos"
+        "title": "Recursos do Projeto"
     },
     {
         "type": "link",
-        "title": "GPT-4",
-        "page": "gpt-4"
-    },
-    {
-        "type": "link",
-        "title": "GPT-3.5",
-        "page": "gpt-3.5"
-    },
-    {
-        "type": "category",
-        "title": "Recursos"
-    },
-    {
-        "type": "link",
-        "title": "API de Chat",
-        "page": "chat"
-    },
-    {
-        "type": "category",
-        "title": "Guias Avançados"
-    },
-    {
-        "type": "link",
-        "title": "Limites de Taxa",
-        "page": "rate-limits"
+        "title": "Guia de Estilo",
+        "page": "guia-de-estilo"
     }
 ]
