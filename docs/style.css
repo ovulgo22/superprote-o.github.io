@@ -254,21 +254,6 @@ body {
     text-decoration: underline;
 }
 
-.content-area pre {
-    position: relative;
-    background-color: var(--code-bg);
-    border-radius: 8px;
-    margin: 24px 0;
-    padding: 20px;
-}
-
-.content-area pre code.hljs {
-    font-family: var(--font-mono);
-    font-size: 0.9rem;
-    padding: 0;
-    background: none;
-}
-
 /* Coluna 3: Barra Lateral Direita (Índice da Página) */
 .on-page-nav {
     width: 260px;
@@ -360,3 +345,145 @@ body {
         padding: 24px;
     }
 }
+
+/* --- Estilos para Tabelas Melhoradas --- */
+.content-area table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 24px 0;
+    font-size: 0.9rem;
+}
+
+.content-area th, .content-area td {
+    text-align: left;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.content-area th {
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.content-area tr:last-child td {
+    border-bottom: none;
+}
+
+.content-area td code {
+    background-color: var(--code-bg);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+}
+
+/* --- Estilos para Blocos de Código Melhorados --- */
+.code-block-wrapper {
+    background-color: var(--code-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    margin: 24px 0;
+    overflow: hidden; /* Garante que os cantos arredondados funcionem */
+}
+
+.code-block-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333333; /* Um pouco mais escuro para contraste */
+    padding: 8px 16px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.code-block-header .lang-name {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-transform: lowercase;
+}
+
+.code-block-header .copy-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    padding: 4px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    transition: color 0.2s;
+}
+.code-block-header .copy-btn:hover {
+    color: var(--text-color);
+}
+
+.content-area pre {
+    margin: 0;
+    border-radius: 0;
+    border: none;
+    padding: 16px;
+    background-color: transparent; /* O wrapper agora tem o fundo */
+}
+
+
+/* --- Estilos para "Callouts" (Avisos, Dicas, etc.) --- */
+.callout {
+    padding: 16px;
+    margin: 24px 0;
+    border-radius: 6px;
+    border-left: 4px solid;
+    display: flex;
+    gap: 12px;
+}
+.callout p {
+    margin-bottom: 0;
+    line-height: 1.6;
+}
+.callout p:first-child {
+    margin-top: 2px;
+}
+.callout i {
+    font-size: 20px;
+    margin-top: 2px;
+}
+
+/* Variações de Cor e Ícone */
+.callout.note {
+    background-color: rgba(0, 170, 255, 0.1);
+    border-color: #00aaff;
+    color: #87cefa;
+}
+.callout.note i { color: #00aaff; }
+
+.callout.warning {
+    background-color: rgba(255, 215, 0, 0.1);
+    border-color: #FFD700;
+    color: #f0e68c;
+}
+.callout.warning i { color: #FFD700; }
+
+.callout.danger {
+    background-color: rgba(255, 71, 87, 0.1);
+    border-color: #FF4757;
+    color: #ffcccb;
+}
+.callout.danger i { color: #FF4757; }
+
+
+/* --- Estilos para Badges de Métodos de API --- */
+.api-method {
+    display: inline-block;
+    padding: 2px 8px;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 700;
+    border-radius: 4px;
+    text-transform: uppercase;
+    line-height: 1.4;
+}
+
+.api-method.get { background-color: #00aaff; color: #fff; }
+.api-method.post { background-color: #4CAF50; color: #fff; }
+.api-method.put { background-color: #FFC107; color: #1a1a1a; }
+.api-method.delete { background-color: #FF4757; color: #fff; }
