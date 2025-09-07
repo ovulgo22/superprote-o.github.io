@@ -18,6 +18,10 @@
     box-sizing: border-box;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     font-family: var(--font-primary);
     background-color: var(--bg-color);
@@ -35,8 +39,8 @@ body {
 .main-layout {
     display: flex;
     flex-grow: 1;
-    overflow: hidden; /* Evita rolagem dupla */
-    padding-top: 60px; /* Espaço para o header fixo */
+    overflow: hidden;
+    padding-top: 60px;
 }
 
 /* Cabeçalho */
@@ -166,40 +170,51 @@ body {
     color: var(--text-muted);
 }
 
-/* Bloco de Código */
-.code-block {
+.content-area a {
+    color: var(--accent-color);
+    text-decoration: none;
+}
+.content-area a:hover {
+    text-decoration: underline;
+}
+
+/* Bloco de Código - Estilo base, highlight.js cuida do resto */
+.content-area pre {
+    position: relative;
     background-color: var(--code-bg);
-    border: 1px solid var(--border-color);
     border-radius: 8px;
     margin: 24px 0;
-    position: relative;
-}
-
-.code-block pre {
     padding: 20px;
-    overflow-x: auto;
+}
+.content-area pre code.hljs {
     font-family: var(--font-mono);
     font-size: 0.9rem;
-    color: var(--text-color);
+    padding: 0; /* highlight.js às vezes adiciona padding, resetamos */
+    background: none;
 }
 
-.code-block .copy-btn {
+.copy-btn {
     position: absolute;
     top: 12px;
     right: 12px;
-    background: var(--border-color);
+    background: #3c3c3c;
     border: none;
     color: var(--text-muted);
     padding: 8px;
     border-radius: 6px;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: background-color 0.2s, color 0.2s;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
-.code-block .copy-btn:hover {
-    background-color: #444;
+.copy-btn:hover {
+    background-color: #4f4f4f;
     color: var(--text-color);
 }
+
 
 /* Responsividade */
 .mobile-menu-toggle {
@@ -216,10 +231,6 @@ body {
 }
 
 @media (max-width: 768px) {
-    .main-layout {
-        flex-direction: column;
-    }
-
     .sidebar {
         position: fixed;
         left: 0;
@@ -228,19 +239,71 @@ body {
         transform: translateX(-100%);
         transition: transform 0.3s ease-in-out;
         z-index: 999;
-        background-color: var(--bg-color); /* Fundo sólido para sobrepor */
+        background-color: var(--bg-color);
         width: 280px;
     }
-    
     .sidebar.visible {
         transform: translateX(0);
     }
-    
     .mobile-menu-toggle {
         display: block;
     }
-    
     .main-header .logo {
         margin-left: 40px;
     }
+    .content-area {
+        padding: 24px;
+    }
+}
+
+/* --- Estilos para o Seletor de Tema --- */
+.theme-toggle {
+    background: none;
+    border: 1px solid var(--border-color);
+    color: var(--text-muted);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 16px;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.theme-toggle:hover {
+    background-color: var(--border-color);
+    color: var(--text-color);
+}
+
+.theme-toggle .sun-icon, .theme-toggle .moon-icon {
+    font-size: 20px;
+}
+.theme-toggle .moon-icon {
+    display: none;
+}
+
+/* --- Definição do Tema Claro (Light Mode) --- */
+body.light-mode {
+    --bg-color: #ffffff;
+    --sidebar-bg: #f7f7f7;
+    --content-bg: #ffffff;
+    --text-color: #1a1a1a;
+    --text-muted: #5c5c5c;
+    --accent-color: #0077cc;
+    --border-color: #e0e0e0;
+    --code-bg: #f0f0f0;
+}
+
+body.light-mode .theme-toggle .sun-icon {
+    display: none;
+}
+body.light-mode .theme-toggle .moon-icon {
+    display: block;
+}
+
+/* --- Transições Suaves --- */
+body, .sidebar, .main-header, .sidebar-search input {
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
