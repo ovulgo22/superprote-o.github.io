@@ -6,7 +6,6 @@
     <title>Super Pró-Técnico | Documentação</title>
     
     <link rel="stylesheet" href="style.css">
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
 
     <link href="https://fonts.googleapis.com/css2?family=Sohne:wght@400;500;700&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
@@ -38,24 +37,16 @@
 
         <div class="main-layout">
             <aside class="sidebar" id="sidebar">
-                <div class="sidebar-search">
-                    <input type="text" placeholder="Buscar na documentação...">
+                <div class="sidebar-search-wrapper">
+                    <div class="sidebar-search">
+                        <i class="ph-magnifying-glass"></i>
+                        <input type="text" id="search-input" placeholder="Buscar na documentação...">
+                    </div>
+                    <div class="search-results" id="search-results"></div>
                 </div>
-                <nav class="sidebar-nav">
+                <nav class="sidebar-nav" id="sidebar-nav">
                     <ul>
-                        <li><a href="#introducao" data-page="introducao" class="nav-link active">Introdução</a></li>
-                        <li><a href="#autenticacao" data-page="autenticacao" class="nav-link">Autenticação</a></li>
-                        <li class="category"><span>Modelos</span></li>
-                        <li><a href="#gpt-4" data-page="gpt-4" class="nav-link">GPT-4</a></li>
-                        <li><a href="#gpt-3-5" data-page="gpt-3.5" class="nav-link">GPT-3.5</a></li>
-                        <li class="category"><span>Recursos</span></li>
-                        <li><a href="#completions" data-page="completions" class="nav-link">Completions</a></li>
-                        <li><a href="#chat" data-page="chat" class="nav-link">Chat</a></li>
-                        <li><a href="#embeddings" data-page="embeddings" class="nav-link">Embeddings</a></li>
-                        <li class="category"><span>Guias Avançados</span></li>
-                        <li><a href="#fine-tuning" data-page="fine-tuning" class="nav-link">Fine-tuning</a></li>
-                        <li><a href="#rate-limits" data-page="rate-limits" class="nav-link">Rate Limits</a></li>
-                    </ul>
+                        </ul>
                 </nav>
             </aside>
 
