@@ -1,203 +1,193 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- Elementos Globais ---
-    const sidebar = document.getElementById('sidebar');
+    const sidebarNav = document.getElementById('sidebar-nav');
     const contentArea = document.getElementById('content-area');
-    const themeToggle = document.getElementById('theme-toggle');
+    const searchInput = document.getElementById('search-input');
+    const searchResults = document.getElementById('search-results');
     const body = document.body;
-    const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+
+    let searchIndex = []; // [ { title, page, content }, ... ]
 
     // --- Configuração das Bibliotecas ---
-    // Configura o Marked para usar o Highlight.js para blocos de código
     marked.setOptions({
-        highlight: function(code, lang) {
+        highlight: (code, lang) => {
             const language = hljs.getLanguage(lang) ? lang : 'plaintext';
             return hljs.highlight(code, { language }).value;
         },
-        langPrefix: 'hljs language-', // Adiciona classes para compatibilidade com temas CSS
+        langPrefix: 'hljs language-',
     });
+
+    // --- INICIALIZAÇÃO DA APLICAÇÃO ---
+    const initializeApp = async () => {
+        setupEventListeners();
+        applySavedTheme();
+
+        const menuConfig = await fetchMenuConfig();
+        if (menuConfig) {
+            buildSidebarMenu(menuConfig);
+            await buildSearchIndex(menuConfig);
+            handleNavigation(); // Carrega a página inicial
+        }
+    };
+
+    // --- Construção do Menu e Índice de Busca ---
+    const fetchMenuConfig = async () => {
+        try {
+            const response = await fetch('menu.json');
+            if (!response.ok) throw new Error('menu.json não encontrado.');
+            return await response.json();
+        } catch (error) {
+            console.error("Erro fatal ao carregar o menu:", error);
+            sidebarNav.innerHTML = "<ul><li>Erro ao carregar menu.</li></ul>";
+            return null;
+        }
+    };
+
+    const buildSidebarMenu = (config) => {
+        const ul = document.createElement('ul');
+        config.forEach(item => {
+            const li = document.createElement('li');
+            if (item.type === 'category') {
+                li.className = 'category';
+                li.innerHTML = `<span>${item.title}</span>`;
+            } else if (item.type === 'link') {
+                li.innerHTML = `<a href="#${item.page}" data-page="${item.page}" class="nav-link">${item.title}</a>`;
+            }
+            ul.appendChild(li);
+        });
+        sidebarNav.innerHTML = '';
+        sidebarNav.appendChild(ul);
+    };
+
+    const buildSearchIndex = async (config) => {
+        const fetchPromises = config
+            .filter(item => item.type === 'link')
+            .map(async item => {
+                try {
+                    const response = await fetch(`content/${item.page}.md`);
+                    const content = await response.text();
+                    searchIndex.push({ title: item.title, page: item.page, content });
+                } catch (e) {
+                    console.warn(`Não foi possível indexar a página: ${item.page}`);
+                }
+            });
+        await Promise.all(fetchPromises);
+    };
 
     // --- Lógica de Carregamento de Conteúdo ---
     const loadContent = async (page) => {
-        // Se a página for nula ou vazia, carrega a página de introdução
-        if (!page) page = 'introducao'; 
-        
+        if (!page) page = 'introducao';
         try {
             const response = await fetch(`content/${page}.md`);
-            if (!response.ok) {
-                throw new Error('Página não encontrada.');
-            }
+            if (!response.ok) throw new Error('Página não encontrada.');
             const markdown = await response.text();
             contentArea.innerHTML = marked.parse(markdown);
-            addCopyButtonsToCodeBlocks();
+            contentArea.querySelectorAll('pre code').forEach(block => hljs.highlightElement(block));
         } catch (error) {
-            contentArea.innerHTML = `<h1>Erro 404</h1><p>O conteúdo solicitado não foi encontrado.</p>`;
-            console.error('Erro ao carregar conteúdo:', error);
+            contentArea.innerHTML = `<h1>Erro 404</h1><p>O conteúdo para "${page}" não foi encontrado.</p>`;
         }
-        contentArea.scrollTop = 0; // Rola para o topo ao carregar nova página
+        contentArea.scrollTop = 0;
     };
-    
-    // --- Lógica do Botão de Copiar (com Delegação de Eventos) ---
-    const addCopyButtonsToCodeBlocks = () => {
-        const codeBlocks = contentArea.querySelectorAll('pre');
-        codeBlocks.forEach(block => {
-            const button = document.createElement('button');
-            button.className = 'copy-btn';
-            button.innerHTML = '<i class="ph-copy"></i> <span>Copiar</span>';
-            block.appendChild(button);
-        });
-    };
-    
-    contentArea.addEventListener('click', (event) => {
-        const copyBtn = event.target.closest('.copy-btn');
-        if (copyBtn) {
-            const pre = copyBtn.parentElement;
-            const code = pre.querySelector('code').innerText;
-            
-            navigator.clipboard.writeText(code).then(() => {
-                copyBtn.innerHTML = '<i class="ph-check-circle"></i> <span>Copiado!</span>';
-                setTimeout(() => {
-                    copyBtn.innerHTML = '<i class="ph-copy"></i> <span>Copiar</span>';
-                }, 2000);
-            }).catch(err => {
-                console.error('Falha ao copiar: ', err);
-                copyBtn.innerText = 'Erro ao copiar';
-            });
-        }
-    });
-
 
     // --- Lógica de Navegação e Roteamento ---
     const handleNavigation = () => {
-        // Pega o hash da URL (ex: #introducao) e remove o '#'
-        const page = window.location.hash.substring(1);
-        loadContent(page || 'introducao'); // Carrega 'introducao' se não houver hash
+        const page = window.location.hash.substring(1) || 'introducao';
+        loadContent(page);
+        updateActiveLink(page);
+    };
 
-        // Atualiza a classe 'active' nos links da sidebar
+    const updateActiveLink = (page) => {
         document.querySelectorAll('.sidebar-nav .nav-link').forEach(link => {
-            if (link.dataset.page === (page || 'introducao')) {
-                link.classList.add('active');
-            } else {
-                link.classList.remove('active');
-            }
+            link.classList.toggle('active', link.dataset.page === page);
         });
     };
 
-    sidebar.addEventListener('click', (event) => {
-        const link = event.target.closest('.nav-link');
-        if (link) {
-            // Fecha o menu sidebar no mobile ao clicar em um link
-            if (sidebar.classList.contains('visible')) {
+    // --- Lógica da Busca ---
+    const handleSearch = (event) => {
+        const query = event.target.value.toLowerCase().trim();
+        if (query.length < 2) {
+            searchResults.classList.remove('visible');
+            return;
+        }
+
+        const results = searchIndex.map(item => {
+            const contentMatchIndex = item.content.toLowerCase().indexOf(query);
+            const titleMatch = item.title.toLowerCase().includes(query);
+            let context = '';
+
+            if (contentMatchIndex > -1) {
+                const start = Math.max(0, contentMatchIndex - 30);
+                const end = contentMatchIndex + query.length + 70;
+                context = `...${item.content.substring(start, end)}...`;
+            } else if (titleMatch) {
+                context = item.content.substring(0, 100) + '...';
+            }
+
+            return { score: titleMatch ? 10 : (contentMatchIndex > -1 ? 5 : 0), item, context };
+        })
+        .filter(result => result.score > 0)
+        .sort((a, b) => b.score - a.score);
+
+        renderSearchResults(results);
+    };
+    
+    const renderSearchResults = (results) => {
+        if (results.length === 0) {
+            searchResults.classList.remove('visible');
+            return;
+        }
+        searchResults.innerHTML = results.map(result => `
+            <a href="#${result.item.page}" class="search-result-item">
+                <span class="result-title">${result.item.title}</span>
+                <span class="result-context">${result.context.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</span>
+            </a>
+        `).join('');
+        searchResults.classList.add('visible');
+    };
+
+    // --- Configuração dos Event Listeners ---
+    function setupEventListeners() {
+        window.addEventListener('hashchange', handleNavigation);
+        
+        searchInput.addEventListener('input', handleSearch);
+        searchInput.addEventListener('focus', handleSearch);
+
+        document.addEventListener('click', (event) => {
+            if (!event.target.closest('.sidebar-search-wrapper')) {
+                searchResults.classList.remove('visible');
+            }
+            if (event.target.closest('.search-result-item')) {
+                searchResults.classList.remove('visible');
+                searchInput.value = '';
+            }
+        });
+
+        // Event listeners para funcionalidades antigas
+        const themeToggle = document.getElementById('theme-toggle');
+        const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+        const sidebar = document.getElementById('sidebar');
+
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('light-mode');
+            localStorage.setItem('theme', body.classList.contains('light-mode') ? 'light' : 'dark');
+        });
+
+        mobileMenuToggle.addEventListener('click', () => sidebar.classList.toggle('visible'));
+
+        sidebar.addEventListener('click', (event) => {
+            if (event.target.closest('.nav-link') && sidebar.classList.contains('visible')) {
                 sidebar.classList.remove('visible');
             }
-        }
-    });
+        });
+    }
 
-    // Ouve por mudanças no hash da URL (ex: clique em link, botões de voltar/avançar)
-    window.addEventListener('hashchange', handleNavigation);
-    // Carrega o conteúdo inicial baseado na URL atual
-    handleNavigation();
-
-
-    // --- Lógica do Seletor de Tema ---
+    // --- Tema ---
     const applySavedTheme = () => {
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'light') {
+        if (localStorage.getItem('theme') === 'light') {
             body.classList.add('light-mode');
         }
     };
-    applySavedTheme();
 
-    themeToggle.addEventListener('click', () => {
-        body.classList.toggle('light-mode');
-        localStorage.setItem('theme', body.classList.contains('light-mode') ? 'light' : 'dark');
-    });
-
-
-    // --- Funcionalidade do Menu Móvel ---
-    mobileMenuToggle.addEventListener('click', () => {
-        sidebar.classList.toggle('visible');
-    });
-
+    // --- Iniciar ---
+    initializeApp();
 });
-
-/* Adicionar ao final do style.css */
-
-/* --- Estilos da Busca --- */
-.sidebar-search-wrapper {
-    position: relative;
-    margin-bottom: 24px;
-}
-
-.sidebar-search {
-    position: relative;
-}
-
-.sidebar-search .ph-magnifying-glass {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    left: 12px;
-    color: var(--text-muted);
-    font-size: 18px;
-}
-
-.sidebar-search input {
-    width: 100%;
-    padding: 10px 10px 10px 40px; /* Espaço para o ícone */
-    border-radius: 6px;
-    background-color: var(--code-bg);
-    border: 1px solid var(--border-color);
-    color: var(--text-color);
-    font-size: 0.9rem;
-}
-
-.search-results {
-    display: none; /* Escondido por padrão */
-    position: absolute;
-    top: 110%;
-    left: 0;
-    right: 0;
-    background-color: var(--sidebar-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    max-height: 400px;
-    overflow-y: auto;
-    z-index: 10;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-}
-
-.search-results.visible {
-    display: block;
-}
-
-.search-results a {
-    display: block;
-    padding: 12px 16px;
-    color: var(--text-muted);
-    text-decoration: none;
-    border-bottom: 1px solid var(--border-color);
-    transition: background-color 0.2s;
-}
-.search-results a:last-child {
-    border-bottom: none;
-}
-
-.search-results a:hover {
-    background-color: var(--border-color);
-    color: var(--text-color);
-}
-
-.search-results .result-title {
-    font-weight: 500;
-    color: var(--text-color);
-    display: block;
-}
-
-.search-results .result-context {
-    font-size: 0.8rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: block;
-    margin-top: 4px;
-}
