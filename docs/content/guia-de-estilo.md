@@ -1,6 +1,10 @@
 # Guia de Estilo de Conteúdo
 
-Este guia define as regras, a voz e os padrões de formatação para toda a documentação. A adesão estrita a este guia é o que garante uma experiência de usuário profissional, clara e consistente, no padrão do GitHub Docs.
+Neste guia, você aprenderá as regras, a voz e os padrões para criar uma documentação clara e consistente, no padrão do GitHub Docs. Seguir estas diretrizes é essencial para a qualidade do projeto.
+
+### Pré-requisitos
+
+-   Familiaridade com a sintaxe básica do Markdown.
 
 ## 1. Voz e Tom
 
@@ -20,46 +24,50 @@ A nossa voz é a personalidade da nossa documentação. O nosso tom adapta essa 
 
 Todo artigo deve seguir esta estrutura previsível para reduzir a carga cognitiva do leitor.
 
-1.  **Título (`#`):** Curto, descritivo e orientado à ação (ex: "Criando seu Primeiro App" em vez de "Sobre Apps").
-2.  **Parágrafo Introdutório (Preamble):** As duas ou três primeiras frases devem resumir o artigo e o que o leitor será capaz de fazer ao final.
-3.  **Pré-requisitos:** Uma seção `### Pré-requisitos` se o guia depender de etapas anteriores.
-4.  **Corpo do Artigo:** Seções lógicas com títulos `##` e `###`.
-5.  **Leitura Adicional:** Uma seção `### Próximos Passos` para guiar o leitor em sua jornada.
+- [ ] Usar um Título (`#`) curto e orientado à ação.
+- [ ] Escrever um parágrafo introdutório que resuma o objetivo.
+- [ ] Adicionar uma seção de `### Pré-requisitos`, se aplicável.
+- [ ] Dividir o corpo do artigo com títulos `##` e `###`.
+- [ ] Concluir com uma seção de `### Próximos Passos` para guiar o leitor.
 
 ## 3. Padrões de Conteúdo e "Fórmulas"
 
 Estas são as "fórmulas" para apresentar informações complexas de forma clara.
 
 ### Tabelas
-Use tabelas para apresentar conjuntos de dados estruturados, como parâmetros de API, com colunas claras: `Parâmetro`, `Tipo`, `Obrigatório`, `Descrição`.
-
-### Listas
-- **Listas Numeradas:** Use para procedimentos passo a passo onde a ordem importa. Cada item deve ser uma ação clara.
-- **Listas de Marcadores:** Use para listar itens onde a ordem não importa.
+Use tabelas para apresentar conjuntos de dados estruturados, como parâmetros de API.
 
 ### Ênfase e Formatação
 -   **Negrito (`**Texto**`):** Para elementos de UI (**Salvar**, **Configurações**), nomes de arquivo (**menu.json**) e ênfase forte.
--   **Código Inline (`` `texto` ``):** Para nomes de parâmetros (`user_id`), comandos (`git clone`), valores (`true`) e nomes de tags HTML (`<div>`).
+-   **Código Inline (`` `texto` ``):** Para nomes de parâmetros (`user_id`), comandos (`git clone`) e valores (`true`).
 -   **Teclas de Atalho (`<kbd>`):** Use a tag `<kbd>` para representar teclas do teclado.
-    -   Exemplo: Pressione <kbd>Ctrl</kbd> + <kbd>C</kbd> para copiar.
+    -   Exemplo: Pressione <kbd>Ctrl</kbd> + <kbd>C</kbd> para copiar o texto.
 
 ### Callouts (Blocos de Destaque)
 Use a sintaxe `> [!TIPO]` para destacar informações.
 
--   `[!NOTE]`: Para informações suplementares. Ícone azul de informação.
--   `[!TIP]`: Para dicas e boas práticas opcionais. Ícone verde de lâmpada.
--   `[!WARNING]`: Para informações que exigem atenção e podem ter consequências inesperadas. Ícone amarelo de aviso.
--   `[!IMPORTANT]`: Para informações cruciais que o usuário não pode ignorar. Ícone roxo de exclamação.
--   `[!DANGER]`: Para avisos sobre ações perigosas ou destrutivas (ex: exclusão de dados). Ícone vermelho de perigo.
+> [!TIP]
+> Você pode aninhar outras formatações, como `código` ou **negrito**, dentro de um callout para dar mais ênfase.
+
+-   `[!NOTE]`: Para informações suplementares.
+-   `[!TIP]`: Para dicas e boas práticas opcionais.
+-   `[!WARNING]`: Para informações que exigem atenção.
+-   `[!IMPORTANT]`: Para informações cruciais que o usuário não pode ignorar.
+-   `[!DANGER]`: Para avisos sobre ações perigosas ou destrutivas.
 
 ### Seções Expansíveis (`<details>`)
-Use para informações secundárias ou muito longas (logs de erro, exemplos de código extensos) que podem poluir o fluxo principal do artigo.
+Use para informações secundárias ou muito longas que podem poluir o fluxo principal do artigo.
 
-```html
 <details>
-<summary>Clique para ver o exemplo de resposta completa</summary>
+<summary>Clique para ver um exemplo de uso do elemento details</summary>
+<details>
+  <summary>Título da Seção</summary>
+  
+  Conteúdo escondido que só aparece quando o usuário clica.
+  
+</details>
 
-```json
-{
-  "long_json_response": "aqui..."
-}
+</details>
+Badges de Métodos de API
+Use <span> com classes específicas para indicar métodos HTTP.
+ * Exemplo: <span class="api-method post">POST</span> /v1/users
