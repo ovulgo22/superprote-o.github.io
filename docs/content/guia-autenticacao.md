@@ -72,6 +72,8 @@ axios.get('[https://api.exemplo.com/v1/users/me](https://api.exemplo.com/v1/user
   });
 
 </div>
+```
+
 3. Melhores Práticas de Segurança
 Educar seus usuários sobre segurança não apenas os protege, mas também protege sua plataforma.
 > [!DANGER]
