@@ -1,0 +1,246 @@
+/* Importação de Fontes e Reset Básico */
+:root {
+    --bg-color: #1a1a1a;
+    --sidebar-bg: #202020;
+    --content-bg: #1a1a1a;
+    --text-color: #e0e0e0;
+    --text-muted: #8e8e8e;
+    --accent-color: #00aaff;
+    --border-color: #333333;
+    --code-bg: #2d2d2d;
+    --font-primary: 'Sohne', sans-serif;
+    --font-mono: 'Source Code Pro', monospace;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-primary);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Layout Principal */
+.docs-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.main-layout {
+    display: flex;
+    flex-grow: 1;
+    overflow: hidden; /* Evita rolagem dupla */
+    padding-top: 60px; /* Espaço para o header fixo */
+}
+
+/* Cabeçalho */
+.main-header {
+    width: 100%;
+    height: 60px;
+    background-color: var(--bg-color);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+.main-header .logo a {
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+.main-header .top-nav a {
+    color: var(--text-muted);
+    text-decoration: none;
+    margin: 0 16px;
+    font-size: 0.9rem;
+    transition: color 0.2s ease;
+}
+
+.main-header .top-nav a:hover {
+    color: var(--text-color);
+}
+
+.login-btn {
+    background-color: var(--accent-color);
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* Barra Lateral */
+.sidebar {
+    width: 280px;
+    flex-shrink: 0;
+    background-color: var(--sidebar-bg);
+    border-right: 1px solid var(--border-color);
+    padding: 24px;
+    overflow-y: auto;
+    height: 100%;
+}
+
+.sidebar-search input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    background-color: var(--code-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    font-size: 0.9rem;
+    margin-bottom: 24px;
+}
+
+.sidebar-nav ul {
+    list-style: none;
+}
+
+.sidebar-nav li a {
+    display: block;
+    color: var(--text-muted);
+    text-decoration: none;
+    padding: 8px 0;
+    font-size: 0.9rem;
+    border-radius: 4px;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.sidebar-nav li a:hover {
+    color: var(--text-color);
+}
+
+.sidebar-nav li a.active {
+    color: var(--accent-color);
+    font-weight: 500;
+}
+
+.sidebar-nav .category {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-top: 24px;
+    margin-bottom: 8px;
+    padding: 0;
+}
+
+/* Área de Conteúdo */
+.content-area {
+    flex-grow: 1;
+    padding: 40px;
+    overflow-y: auto;
+    height: 100%;
+}
+
+.content-area h1 {
+    font-size: 2.5rem;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 16px;
+}
+
+.content-area h2 {
+    font-size: 1.8rem;
+    margin-top: 48px;
+    margin-bottom: 16px;
+}
+
+.content-area p {
+    line-height: 1.7;
+    margin-bottom: 16px;
+    color: var(--text-muted);
+}
+
+/* Bloco de Código */
+.code-block {
+    background-color: var(--code-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    margin: 24px 0;
+    position: relative;
+}
+
+.code-block pre {
+    padding: 20px;
+    overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: var(--text-color);
+}
+
+.code-block .copy-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: var(--border-color);
+    border: none;
+    color: var(--text-muted);
+    padding: 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.code-block .copy-btn:hover {
+    background-color: #444;
+    color: var(--text-color);
+}
+
+/* Responsividade */
+.mobile-menu-toggle {
+    display: none;
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 1001;
+    background: transparent;
+    border: none;
+    color: var(--text-color);
+    font-size: 24px;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .main-layout {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        position: fixed;
+        left: 0;
+        top: 60px;
+        bottom: 0;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease-in-out;
+        z-index: 999;
+        background-color: var(--bg-color); /* Fundo sólido para sobrepor */
+        width: 280px;
+    }
+    
+    .sidebar.visible {
+        transform: translateX(0);
+    }
+    
+    .mobile-menu-toggle {
+        display: block;
+    }
+    
+    .main-header .logo {
+        margin-left: 40px;
+    }
+}
