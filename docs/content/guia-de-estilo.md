@@ -1,54 +1,65 @@
 # Guia de Estilo de Conteúdo
 
-Este guia define as melhores práticas para escrever e estruturar a documentação neste site. Seguir estas regras garante que nosso conteúdo seja claro, consistente e fácil de usar, semelhante ao padrão de qualidade do GitHub Docs.
+Este guia define as regras, a voz e os padrões de formatação para toda a documentação. A adesão estrita a este guia é o que garante uma experiência de usuário profissional, clara e consistente, no padrão do GitHub Docs.
 
-## Princípios Fundamentais
+## 1. Voz e Tom
 
-1.  **Clareza Acima de Tudo:** Use linguagem simples e direta. Evite jargões ou explique-os na primeira vez que os usar. O objetivo é remover a ambiguidade.
-2.  **Estrutura Escaneável:** Os usuários raramente leem palavra por palavra. Eles escaneiam a página em busca de informações. Organize o conteúdo para facilitar essa varredura.
-3.  **Foco na Ação:** Comece com o que o usuário precisa saber ou fazer. Forneça o "como" imediatamente, seguido pelo "porquê" ou por detalhes mais profundos.
+A nossa voz é a personalidade da nossa documentação. O nosso tom adapta essa voz a situações específicas.
 
-## Estrutura Padrão de um Artigo
+-   **Seja Direto e Ativo:** Use a voz ativa. Comece as frases com verbos.
+    -   **Correto:** "Execute o comando para instalar as dependências."
+    -   **Incorreto:** "As dependências podem ser instaladas executando o comando."
 
-Cada página de documentação deve seguir esta estrutura básica para manter a previsibilidade.
+-   **Seja Claro e Conciso:** Evite palavras desnecessárias. Vá direto ao ponto.
+    -   **Correto:** "Para usar a API, você precisa de uma chave de autenticação."
+    -   **Incorreto:** "É importante notar que, para poder utilizar a API, será necessário primeiro obter uma chave de autenticação."
 
-### 1. Título (`# Título Principal`)
-O título deve ser descritivo e indicar claramente o conteúdo da página.
+-   **Seja Empático:** Antecipe as dúvidas e dificuldades do leitor. Use "callouts" para dar dicas e avisos onde eles são mais necessários.
 
-### 2. Parágrafo Introdutório
-A primeira frase ou parágrafo deve resumir o propósito do artigo. Diga ao leitor o que ele aprenderá ou será capaz de fazer depois de ler a página.
+## 2. Estrutura Padrão de Artigo
 
-* **Bom:** "Neste guia, você aprenderá a configurar e usar o endpoint de Chat para criar conversas interativas."
-* **Ruim:** "O endpoint de Chat é uma funcionalidade da nossa API."
+Todo artigo deve seguir esta estrutura previsível para reduzir a carga cognitiva do leitor.
 
-### 3. Seção de Pré-requisitos (Opcional)
-Se um guia exigir conhecimento prévio ou configuração, liste-os em uma seção `### Pré-requisitos` usando uma lista de marcadores.
+1.  **Título (`#`):** Curto, descritivo e orientado à ação (ex: "Criando seu Primeiro App" em vez de "Sobre Apps").
+2.  **Parágrafo Introdutório (Preamble):** As duas ou três primeiras frases devem resumir o artigo e o que o leitor será capaz de fazer ao final.
+3.  **Pré-requisitos:** Uma seção `### Pré-requisitos` se o guia depender de etapas anteriores.
+4.  **Corpo do Artigo:** Seções lógicas com títulos `##` e `###`.
+5.  **Leitura Adicional:** Uma seção `### Próximos Passos` para guiar o leitor em sua jornada.
 
-### 4. Corpo do Artigo (Títulos `##` e `###`)
--   Use `## Títulos de Seção` para dividir o artigo em seções lógicas e principais.
--   Use `### Subtítulos` para detalhar ainda mais dentro de uma seção.
--   Para tutoriais passo a passo, use listas numeradas.
--   Para listas de itens não sequenciais, use listas de marcadores.
+## 3. Padrões de Conteúdo e "Fórmulas"
 
-### 5. Leitura Adicional (Opcional)
-Ao final do artigo, você pode adicionar uma seção `### Próximos Passos` ou `### Leitura Adicional` com links para outros guias relevantes.
+Estas são as "fórmulas" para apresentar informações complexas de forma clara.
 
-## Formatação de Texto
+### Tabelas
+Use tabelas para apresentar conjuntos de dados estruturados, como parâmetros de API, com colunas claras: `Parâmetro`, `Tipo`, `Obrigatório`, `Descrição`.
 
-A consistência na formatação é crucial para a legibilidade.
+### Listas
+- **Listas Numeradas:** Use para procedimentos passo a passo onde a ordem importa. Cada item deve ser uma ação clara.
+- **Listas de Marcadores:** Use para listar itens onde a ordem não importa.
 
--   **Negrito (`**Texto**`):** Use para se referir a elementos de UI clicáveis (botões, nomes de menu), nomes de arquivo ou para dar forte ênfase a um termo específico.
-    -   Exemplo: "Navegue até **Configurações > Chaves de API** e clique em **Gerar Nova Chave**."
-    -   Exemplo: "Certifique-se de salvar seu arquivo **menu.json**."
+### Ênfase e Formatação
+-   **Negrito (`**Texto**`):** Para elementos de UI (**Salvar**, **Configurações**), nomes de arquivo (**menu.json**) e ênfase forte.
+-   **Código Inline (`` `texto` ``):** Para nomes de parâmetros (`user_id`), comandos (`git clone`), valores (`true`) e nomes de tags HTML (`<div>`).
+-   **Teclas de Atalho (`<kbd>`):** Use a tag `<kbd>` para representar teclas do teclado.
+    -   Exemplo: Pressione <kbd>Ctrl</kbd> + <kbd>C</kbd> para copiar.
 
--   **Código Inline (`` `texto` ``):** Use para nomes de variáveis, valores, comandos de terminal, nomes de parâmetros, métodos de API, ou qualquer trecho de código curto no meio de uma frase.
-    -   Exemplo: "Defina o parâmetro `temperature` como `0.2` para respostas mais determinísticas."
-    -   Exemplo: "Execute o comando `npm install` para instalar as dependências."
+### Callouts (Blocos de Destaque)
+Use a sintaxe `> [!TIPO]` para destacar informações.
 
--   **Itálico (`*Texto*`):** Use com moderação para introduzir um novo termo ou para dar uma ênfase sutil.
-    -   Exemplo: "O processo de ajustar um modelo aos seus próprios dados é chamado de *fine-tuning*."
+-   `[!NOTE]`: Para informações suplementares. Ícone azul de informação.
+-   `[!TIP]`: Para dicas e boas práticas opcionais. Ícone verde de lâmpada.
+-   `[!WARNING]`: Para informações que exigem atenção e podem ter consequências inesperadas. Ícone amarelo de aviso.
+-   `[!IMPORTANT]`: Para informações cruciais que o usuário não pode ignorar. Ícone roxo de exclamação.
+-   `[!DANGER]`: Para avisos sobre ações perigosas ou destrutivas (ex: exclusão de dados). Ícone vermelho de perigo.
 
--   **Callouts (`[!NOTE]`, `[!WARNING]`):** Use para destacar informações importantes que estão fora do fluxo principal do texto.
-    -   `[!NOTE]`: Para informações suplementares ou dicas úteis.
-    -   `[!WARNING]`: Para alertar o usuário sobre cuidados importantes ou ações não reversíveis.
-    -   `[!DANGER]`: Para avisos críticos sobre segurança ou perda de dados.
+### Seções Expansíveis (`<details>`)
+Use para informações secundárias ou muito longas (logs de erro, exemplos de código extensos) que podem poluir o fluxo principal do artigo.
+
+```html
+<details>
+<summary>Clique para ver o exemplo de resposta completa</summary>
+
+```json
+{
+  "long_json_response": "aqui..."
+}
