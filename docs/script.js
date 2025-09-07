@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Pós-processamento do HTML renderizado
             enhanceCodeBlocks();
             transformCallouts();
-            generateOnPageNavAndAnchors(); // Função ATUALIZADA
+            generateOnPageNavAndAnchors();
 
         } catch (error) {
             contentArea.innerHTML = `<h1>Erro 404</h1><p>O conteúdo para "${page}" não foi encontrado.</p>`;
@@ -51,16 +51,71 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // --- FUNÇÕES DE MELHORIA DE UI ---
 
-    const enhanceCodeBlocks = () => { /* ... (código inalterado) ... */ const codeBlocks = contentArea.querySelectorAll('pre'); codeBlocks.forEach(pre => { if (pre.parentNode.classList.contains('code-block-wrapper')) { return; } const code = pre.querySelector('code'); if (!code) return; const lang = code.className.replace('hljs language-', '').trim() || 'shell'; const wrapper = document.createElement('div'); wrapper.className = 'code-block-wrapper'; const header = document.createElement('div'); header.className = 'code-block-header'; const langName = document.createElement('span'); langName.className = 'lang-name'; langName.textContent = lang; const copyBtn = document.createElement('button'); copyBtn.className = 'copy-btn'; copyBtn.innerHTML = '<i class="ph-copy"></i> Copiar'; copyBtn.addEventListener('click', () => { navigator.clipboard.writeText(code.innerText).then(() => { copyBtn.innerHTML = '<i class="ph-check-circle"></i> Copiado!'; setTimeout(() => { copyBtn.innerHTML = '<i class="ph-copy"></i> Copiar'; }, 2000); }); }); header.appendChild(langName); header.appendChild(copyBtn); pre.parentNode.insertBefore(wrapper, pre); wrapper.appendChild(header); wrapper.appendChild(pre); }); };
-    const transformCallouts = () => { /* ... (código inalterado) ... */ const blockquotes = contentArea.querySelectorAll('blockquote'); const calloutTypes = { '[!NOTE]': { class: 'note', icon: 'ph-info' }, '[!WARNING]': { class: 'warning', icon: 'ph-warning' }, '[!DANGER]': { class: 'danger', icon: 'ph-warning-octagon' } }; blockquotes.forEach(bq => { const p = bq.querySelector('p'); if (!p) return; const text = p.innerHTML.trim(); const type = Object.keys(calloutTypes).find(key => text.startsWith(key)); if (type) { const config = calloutTypes[type]; bq.className = `callout ${config.class}`; p.innerHTML = text.substring(type.length).trim(); bq.innerHTML = `<i class="ph ${config.icon}"></i><div>${bq.innerHTML}</div>`; } }); };
+    const enhanceCodeBlocks = () => {
+        const codeBlocks = contentArea.querySelectorAll('pre');
+        codeBlocks.forEach(pre => {
+            if (pre.parentNode.classList.contains('code-block-wrapper')) return;
+            const code = pre.querySelector('code');
+            if (!code) return;
+            const lang = code.className.replace('hljs language-', '').trim() || 'shell';
+            const wrapper = document.createElement('div');
+            wrapper.className = 'code-block-wrapper';
+            const header = document.createElement('div');
+            header.className = 'code-block-header';
+            const langName = document.createElement('span');
+            langName.className = 'lang-name';
+            langName.textContent = lang;
+            const copyBtn = document.createElement('button');
+            copyBtn.className = 'copy-btn';
+            copyBtn.innerHTML = '<i class="ph-copy"></i> Copiar';
+            copyBtn.addEventListener('click', () => {
+                navigator.clipboard.writeText(code.innerText).then(() => {
+                    copyBtn.innerHTML = '<i class="ph-check-circle"></i> Copiado!';
+                    setTimeout(() => { copyBtn.innerHTML = '<i class="ph-copy"></i> Copiar'; }, 2000);
+                });
+            });
+            header.appendChild(langName);
+            header.appendChild(copyBtn);
+            pre.parentNode.insertBefore(wrapper, pre);
+            wrapper.appendChild(header);
+            wrapper.appendChild(pre);
+        });
+    };
 
-    // --- ATUALIZADO: Geração do TOC e dos Links de Âncora ---
+    // ATUALIZADO para incluir os novos tipos de callouts
+    const transformCallouts = () => {
+        const blockquotes = contentArea.querySelectorAll('blockquote');
+        const calloutTypes = {
+            '[!NOTE]':      { class: 'note',      icon: 'ph-info' },
+            '[!TIP]':       { class: 'tip',       icon: 'ph-lightbulb' }, // NOVO
+            '[!WARNING]':   { class: 'warning',   icon: 'ph-warning' },
+            '[!IMPORTANT]': { class: 'important', icon: 'ph-seal-warning' }, // NOVO
+            '[!DANGER]':    { class: 'danger',    icon: 'ph-warning-octagon' }
+        };
+
+        blockquotes.forEach(bq => {
+            const p = bq.querySelector('p');
+            if (!p) return;
+            
+            const text = p.innerHTML.trim();
+            const type = Object.keys(calloutTypes).find(key => text.startsWith(key));
+
+            if (type) {
+                const config = calloutTypes[type];
+                bq.className = `callout ${config.class}`;
+                p.innerHTML = text.substring(type.length).trim();
+                bq.innerHTML = `<i class="ph ${config.icon}"></i><div>${bq.innerHTML}</div>`;
+            }
+        });
+    };
+
+    // Geração do TOC e dos Links de Âncora
     const generateOnPageNavAndAnchors = () => {
         onPageToc.innerHTML = '';
         const headings = contentArea.querySelectorAll('h2, h3');
         
-        if (headings.length < 1) { // Roda mesmo com 1 título para adicionar a âncora
-            setupIntersectionObserver(); // Garante que o observer seja limpo
+        if (headings.length < 1) {
+            setupIntersectionObserver();
             return;
         }
 
@@ -69,7 +124,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const id = text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');
             heading.id = id;
 
-            // Adiciona o ícone de link permanente (permalink)
             const anchorLink = document.createElement('a');
             anchorLink.className = 'heading-anchor-link';
             anchorLink.href = `#${id}`;
@@ -77,8 +131,6 @@ document.addEventListener('DOMContentLoaded', () => {
             anchorLink.innerHTML = '<i class="ph-link"></i>';
             heading.appendChild(anchorLink);
 
-            // Adiciona o link ao menu da direita (TOC)
-            // Apenas se houver mais de um título para justificar um índice
             if (headings.length >= 2) {
                 const link = document.createElement('a');
                 link.href = `#${id}`;
@@ -91,15 +143,37 @@ document.addEventListener('DOMContentLoaded', () => {
         setupIntersectionObserver();
     };
 
-    const setupIntersectionObserver = () => { /* ... (código inalterado) ... */ if (observer) observer.disconnect(); const headings = contentArea.querySelectorAll('h2, h3'); if (headings.length === 0) return; const options = { root: contentArea, rootMargin: "0px 0px -80% 0px" }; observer = new IntersectionObserver((entries) => { let visibleSection = null; entries.forEach(entry => { if (entry.isIntersecting) { if (!visibleSection) { visibleSection = entry.target.getAttribute('id'); } } }); if (visibleSection) { onPageToc.querySelectorAll('a').forEach(a => a.classList.remove('active')); const activeLink = onPageToc.querySelector(`a[href="#${visibleSection}"]`); if(activeLink) { activeLink.classList.add('active'); } } }, options); headings.forEach(heading => observer.observe(heading)); };
-    const fetchMenuConfig = async () => { /* ... (código inalterado) ... */ try { const response = await fetch('menu.json'); if (!response.ok) throw new Error('menu.json não encontrado.'); return await response.json(); } catch (error) { console.error("Erro fatal ao carregar o menu:", error); sidebarNav.innerHTML = "<ul><li>Erro ao carregar menu.</li></ul>"; return null; } };
-    const buildSidebarMenu = (config) => { /* ... (código inalterado) ... */ const ul = document.createElement('ul'); config.forEach(item => { const li = document.createElement('li'); if (item.type === 'category') { li.className = 'category'; li.innerHTML = `<span>${item.title}</span>`; } else if (item.type === 'link') { li.innerHTML = `<a href="#${item.page}" data-page="${item.page}" class="nav-link">${item.title}</a>`; } ul.appendChild(li); }); sidebarNav.innerHTML = ''; sidebarNav.appendChild(ul); };
-    const buildSearchIndex = async (config) => { /* ... (código inalterado) ... */ const fetchPromises = config .filter(item => item.type === 'link') .map(async item => { try { const response = await fetch(`content/${item.page}.md`); const content = await response.text(); searchIndex.push({ title: item.title, page: item.page, content }); } catch (e) { console.warn(`Não foi possível indexar a página: ${item.page}`); } }); await Promise.all(fetchPromises); };
-    const handleNavigation = () => { /* ... (código inalterado) ... */ const page = window.location.hash.substring(1) || 'introducao'; loadContent(page); updateActiveLink(page); };
-    const updateActiveLink = (page) => { /* ... (código inalterado) ... */ document.querySelectorAll('.sidebar-nav .nav-link').forEach(link => { link.classList.toggle('active', link.dataset.page === page); }); };
-    const handleSearch = (event) => { /* ... (código inalterado) ... */ const query = event.target.value.toLowerCase().trim(); if (query.length < 2) { searchResults.classList.remove('visible'); return; } const results = searchIndex.map(item => { const contentMatchIndex = item.content.toLowerCase().indexOf(query); const titleMatch = item.title.toLowerCase().includes(query); let context = ''; if (contentMatchIndex > -1) { const start = Math.max(0, contentMatchIndex - 30); const end = contentMatchIndex + query.length + 70; context = `...${item.content.substring(start, end)}...`; } else if (titleMatch) { context = item.content.substring(0, 100) + '...'; } return { score: titleMatch ? 10 : (contentMatchIndex > -1 ? 5 : 0), item, context }; }) .filter(result => result.score > 0) .sort((a, b) => b.score - a.score); renderSearchResults(results); };
-    const renderSearchResults = (results) => { /* ... (código inalterado) ... */ if (results.length === 0) { searchResults.classList.remove('visible'); return; } searchResults.innerHTML = results.map(result => ` <a href="#${result.item.page}" class="search-result-item"> <span class="result-title">${result.item.title}</span> <span class="result-context">${result.context.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</span> </a> `).join(''); searchResults.classList.add('visible'); };
-    function setupEventListeners() { /* ... (código inalterado) ... */ window.addEventListener('hashchange', handleNavigation); searchInput.addEventListener('input', handleSearch); searchInput.addEventListener('focus', handleSearch); document.addEventListener('click', (event) => { if (!event.target.closest('.sidebar-search-wrapper')) { searchResults.classList.remove('visible'); } if (event.target.closest('.search-result-item')) { searchResults.classList.remove('visible'); searchInput.value = ''; } }); const mobileMenuToggle = document.getElementById('mobile-menu-toggle'); const sidebar = document.getElementById('sidebar'); mobileMenuToggle.addEventListener('click', () => sidebar.classList.toggle('visible')); sidebar.addEventListener('click', (event) => { if (event.target.closest('.nav-link') && sidebar.classList.contains('visible')) { sidebar.classList.remove('visible'); } }); }
+    const setupIntersectionObserver = () => {
+        if (observer) observer.disconnect();
+        const headings = contentArea.querySelectorAll('h2, h3');
+        if (headings.length === 0) return;
+        
+        const options = { root: contentArea, rootMargin: "0px 0px -80% 0px" };
+        observer = new IntersectionObserver((entries) => {
+            let visibleSection = null;
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    if (!visibleSection) { visibleSection = entry.target.getAttribute('id'); }
+                }
+            });
+            if (visibleSection) {
+                 onPageToc.querySelectorAll('a').forEach(a => a.classList.remove('active'));
+                 const activeLink = onPageToc.querySelector(`a[href="#${visibleSection}"]`);
+                 if(activeLink) { activeLink.classList.add('active'); }
+            }
+        }, options);
+        headings.forEach(heading => observer.observe(heading));
+    };
+
+    // --- Funções Principais (Menu, Busca, Navegação) ---
+    const fetchMenuConfig = async () => { try { const response = await fetch('menu.json'); if (!response.ok) throw new Error('menu.json não encontrado.'); return await response.json(); } catch (error) { console.error("Erro fatal ao carregar o menu:", error); sidebarNav.innerHTML = "<ul><li>Erro ao carregar menu.</li></ul>"; return null; } };
+    const buildSidebarMenu = (config) => { const ul = document.createElement('ul'); config.forEach(item => { const li = document.createElement('li'); if (item.type === 'category') { li.className = 'category'; li.innerHTML = `<span>${item.title}</span>`; } else if (item.type === 'link') { li.innerHTML = `<a href="#${item.page}" data-page="${item.page}" class="nav-link">${item.title}</a>`; } ul.appendChild(li); }); sidebarNav.innerHTML = ''; sidebarNav.appendChild(ul); };
+    const buildSearchIndex = async (config) => { const fetchPromises = config .filter(item => item.type === 'link') .map(async item => { try { const response = await fetch(`content/${item.page}.md`); const content = await response.text(); searchIndex.push({ title: item.title, page: item.page, content }); } catch (e) { console.warn(`Não foi possível indexar a página: ${item.page}`); } }); await Promise.all(fetchPromises); };
+    const handleNavigation = () => { const page = window.location.hash.substring(1) || 'introducao'; loadContent(page); updateActiveLink(page); };
+    const updateActiveLink = (page) => { document.querySelectorAll('.sidebar-nav .nav-link').forEach(link => { link.classList.toggle('active', link.dataset.page === page); }); };
+    const handleSearch = (event) => { const query = event.target.value.toLowerCase().trim(); if (query.length < 2) { searchResults.classList.remove('visible'); return; } const results = searchIndex.map(item => { const contentMatchIndex = item.content.toLowerCase().indexOf(query); const titleMatch = item.title.toLowerCase().includes(query); let context = ''; if (contentMatchIndex > -1) { const start = Math.max(0, contentMatchIndex - 30); const end = contentMatchIndex + query.length + 70; context = `...${item.content.substring(start, end)}...`; } else if (titleMatch) { context = item.content.substring(0, 100) + '...'; } return { score: titleMatch ? 10 : (contentMatchIndex > -1 ? 5 : 0), item, context }; }) .filter(result => result.score > 0) .sort((a, b) => b.score - a.score); renderSearchResults(results); };
+    const renderSearchResults = (results) => { if (results.length === 0) { searchResults.classList.remove('visible'); return; } searchResults.innerHTML = results.map(result => ` <a href="#${result.item.page}" class="search-result-item"> <span class="result-title">${result.item.title}</span> <span class="result-context">${result.context.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</span> </a> `).join(''); searchResults.classList.add('visible'); };
+    function setupEventListeners() { window.addEventListener('hashchange', handleNavigation); searchInput.addEventListener('input', handleSearch); searchInput.addEventListener('focus', handleSearch); document.addEventListener('click', (event) => { if (!event.target.closest('.sidebar-search-wrapper')) { searchResults.classList.remove('visible'); } if (event.target.closest('.search-result-item')) { searchResults.classList.remove('visible'); searchInput.value = ''; } }); const mobileMenuToggle = document.getElementById('mobile-menu-toggle'); const sidebar = document.getElementById('sidebar'); mobileMenuToggle.addEventListener('click', () => sidebar.classList.toggle('visible')); sidebar.addEventListener('click', (event) => { if (event.target.closest('.nav-link') && sidebar.classList.contains('visible')) { sidebar.classList.remove('visible'); } }); }
 
     // --- Iniciar ---
     initializeApp();
