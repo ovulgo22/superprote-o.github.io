@@ -4,7 +4,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const contentArea = document.getElementById('content-area');
     const searchInput = document.getElementById('search-input');
     const searchResults = document.getElementById('search-results');
-    const body = document.body;
 
     let searchIndex = []; // [ { title, page, content }, ... ]
 
@@ -20,7 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- INICIALIZAÇÃO DA APLICAÇÃO ---
     const initializeApp = async () => {
         setupEventListeners();
-        applySavedTheme();
 
         const menuConfig = await fetchMenuConfig();
         if (menuConfig) {
@@ -161,16 +159,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 searchInput.value = '';
             }
         });
-
-        // Event listeners para funcionalidades antigas
-        const themeToggle = document.getElementById('theme-toggle');
+        
         const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
         const sidebar = document.getElementById('sidebar');
-
-        themeToggle.addEventListener('click', () => {
-            body.classList.toggle('light-mode');
-            localStorage.setItem('theme', body.classList.contains('light-mode') ? 'light' : 'dark');
-        });
 
         mobileMenuToggle.addEventListener('click', () => sidebar.classList.toggle('visible'));
 
@@ -180,13 +171,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-
-    // --- Tema ---
-    const applySavedTheme = () => {
-        if (localStorage.getItem('theme') === 'light') {
-            body.classList.add('light-mode');
-        }
-    };
 
     // --- Iniciar ---
     initializeApp();
