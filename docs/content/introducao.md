@@ -15,3 +15,10 @@ Para aproveitar ao máximo nossa API, é útil entender alguns conceitos básico
 ### Estrutura da API
 
 Nossa API é organizada em torno de princípios REST e utiliza endpoints previsíveis com respostas em formato JSON. O endpoint base para todas as requisições da v1 é:
+
+
+https://api.superprotecnico.com/v1
+
+A autenticação é feita através de chaves de API. Consulte a seção de **Autenticação** para mais detalhes.
+
+Quando estiver pronto, peça o próximo arquivo.
