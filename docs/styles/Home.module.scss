@@ -1,0 +1,25 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 0 2rem;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
+.main {
+  text-align: center;
+  padding: 4rem 0;
+}
+
+h1 {
+  font-size: 2.5rem;
+  color: var(--color-primary);
+}
+
+p {
+  font-size: 1.25rem;
+  color: var(--color-secondary);
+}

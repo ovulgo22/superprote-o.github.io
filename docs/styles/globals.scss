@@ -1,0 +1,38 @@
+// Base CSS Reset
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  line-height: 1.6;
+  color: var(--color-text);
+  background-color: var(--color-bg);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+:root {
+  --color-text: #24292f;
+  --color-bg: #ffffff;
+  --color-primary: #0969da;
+  --color-secondary: #6e7781;
+
+  /* Dark Mode */
+  --color-text-dark: #c9d1d9;
+  --color-bg-dark: #0d1117;
+  --color-primary-dark: #58a6ff;
+  --color-secondary-dark: #8b949e;
+}
